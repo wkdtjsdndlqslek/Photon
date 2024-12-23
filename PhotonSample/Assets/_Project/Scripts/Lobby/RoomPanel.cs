@@ -37,7 +37,7 @@ public class RoomPanel : MonoBehaviour
 	private void Awake()
 	{
         startButton.onClick.AddListener(StartButtonClick);
-        cancelButton.onClick.AddListener(CancleButtonClick);
+        cancelButton.onClick.AddListener(CancelButtonClick);
 		difficultyDropdown.ClearOptions();
 		foreach (object difficulty in Enum.GetValues(typeof(Difficulty)))
 		{
@@ -46,14 +46,35 @@ public class RoomPanel : MonoBehaviour
 		}
         difficultyDropdown.onValueChanged.AddListener(DifficultyValueChange);
 	}
-    IEnumerator Start()
-    {
-        yield return new WaitForSeconds(0.1f);
-        ChatManager.Instance.ConnectUsingSettings();
-        ChatManager.Instance.ChatStart(roomTitleText.text);
-    }
 
-    private void CancleButtonClick()
+    private void OnEnable()
+    {
+        foreach (Transform child in playerList)
+		{//플레이어 리스트에 다른 객체가 있으면 일단 모두 삭제
+			Destroy(child.gameObject);
+		}
+		if (false == PhotonNetwork.InRoom) return;
+
+		roomTitleText.text = PhotonNetwork.CurrentRoom.Name;
+
+		foreach(Player player in PhotonNetwork.CurrentRoom.Players.Values)
+		{//플레이어 정보 객체 생성
+			JoinPlayer(player);
+		}
+        //방장인 지 여부를 확인해서 활성화/비활성화
+        difficultyDropdown.gameObject.SetActive(PhotonNetwork.IsMasterClient); 
+		startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
+		PhotonNetwork.AutomaticallySyncScene=true;
+
+        ChatManager.Instance.ConnectUsingSettings();
+		Invoke("ForInvoke",2f);
+    }
+	private void ForInvoke()
+	{
+		ChatManager.Instance.ChatStart(roomTitleText.text);
+
+    }	
+    private void CancelButtonClick()
     {
 		PhotonNetwork.LeaveRoom();
     }
@@ -68,27 +89,6 @@ public class RoomPanel : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        foreach(Transform child in playerList)
-		{//플레이어 리스트에 다른 객체가 있으면 일단 모두 삭제
-			Destroy(child.gameObject);
-			
-		}
-		if (false == PhotonNetwork.InRoom) return;
-
-		roomTitleText.text = PhotonNetwork.CurrentRoom.Name;
-
-		foreach(Player player in PhotonNetwork.CurrentRoom.Players.Values)
-		{//플레이어 정보 객체 생성
-			JoinPlayer(player);
-		}
-        //방장인 지 여부를 확인해서 활성화/비활성화
-        difficultyDropdown.gameObject.SetActive(PhotonNetwork.IsMasterClient); 
-		startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
-
-		PhotonNetwork.AutomaticallySyncScene=true;
-    }
 
 	public void JoinPlayer(Player newPlayer)
 	{

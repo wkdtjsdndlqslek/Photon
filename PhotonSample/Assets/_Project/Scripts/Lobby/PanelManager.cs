@@ -11,6 +11,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
 	public MenuPanel menu;
 	public LobbyPanel lobby;
 	public RoomPanel room;
+	public ChatUI chat;
 
 	
 	Dictionary<string, GameObject> panelDic;
@@ -52,11 +53,13 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom() //방을 생성하였을 때 호출
     {
 		PanelOpen("Room");
+		chat.gameObject.SetActive(true);
     }
 
     public override void OnLeftRoom() //방에서 떠났을 때 호출
     {
 		PanelOpen("Menu");
+        chat.gameObject.SetActive(false);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -83,6 +86,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom() //방에 참여
     {
 		PanelOpen("Room");
+        chat.gameObject.SetActive(true);
     }
 
     public override void OnLeftLobby()

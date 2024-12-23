@@ -64,6 +64,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     //특정 채팅방(채팅 채널)에서 채팅 시작
     public void ChatStart(string roomName)
     {
+        print($"{roomName}");
         client.Subscribe(new string[] { roomName });
     }
 
@@ -84,8 +85,9 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void OnSubscribed(string[] channels, bool[] results)
     {
+        print("구독했니");
         currentChannel = channels[0];
-        joinUI.gameObject.SetActive(false);
+        //joinUI.gameObject.SetActive(false);
         chatUI.gameObject.SetActive(true);
         chatUI.roomNameLabel.text = channels[0];
         chatUI.ReceiveChatMessage("", $"<color=green>{currentChannel} 채팅방에 입장하였습니다.</color>");
@@ -93,6 +95,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void OnConnected()
     {
+        print("OnConnected");
         //joinUI.OnJoinedServer();
     }
 
