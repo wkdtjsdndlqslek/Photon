@@ -57,7 +57,7 @@ public class MenuPanel : MonoBehaviour
 	private void FindRoomButtonClick()
 	{
 		PhotonNetwork.JoinLobby();
-	}
+    }
 	
 	private void RandomRoomButtonClick() 
 	{
@@ -95,8 +95,9 @@ public class MenuPanel : MonoBehaviour
 			MaxPlayers = MAX_PLAYER
         };
 		PhotonNetwork.CreateRoom(roomName, option); //최대 플레이어가 8명인 방 생성
+		print($"방 생성 요청: {roomName}");
 
-	}
+    }
 
 	private void CancelButtonClick()
 	{

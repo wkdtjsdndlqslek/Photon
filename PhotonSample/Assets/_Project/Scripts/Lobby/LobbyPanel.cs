@@ -38,7 +38,7 @@ public class LobbyPanel : MonoBehaviour
 
 	public void UpdateRoomList(List<RoomInfo> roomList)
 	{
-        print($"업뎃 룸리스트{roomList[0].Name}");
+		print(roomList.Count);
         //현재 RoomList에는 있는데, OnRoomListUpdate의 파라미터로 넘어온
         //RoomList에는 없는 방의 참여 버튼은 삭제해야 함.
         List<RoomInfo> destroyCandidate;//파괴 후보
@@ -47,7 +47,6 @@ public class LobbyPanel : MonoBehaviour
 		//currentRoomList에는 없는데 roomList에는 있는 방 참여 버튼생성하기
 		foreach(RoomInfo roomInfo in roomList)
 		{
-            
             if (currentRoomList.Contains(roomInfo)) continue;
 			AddRoomButton(roomInfo);
 		}
